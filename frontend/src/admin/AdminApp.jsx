@@ -8,11 +8,14 @@ import EventsList from './pages/EventsList.jsx';
 import EventEditor from './pages/EventEditor.jsx';
 import SiteEditor from './pages/SiteEditor.jsx';
 import Submissions from './pages/Submissions.jsx';
+import PostsList from './pages/PostsList.jsx';
+import PostEditor from './pages/PostEditor.jsx';
 import './admin.css';
 
 const NAV = [
   ['', 'Tableau de bord', 'home'],
   ['evenements', 'Événements', 'calendar'],
+  ['actualites', 'Actualités', 'video'],
   ['contenu', 'Contenu du site', 'edit'],
   ['soumissions', 'Soumissions', 'inbox'],
 ];
@@ -70,6 +73,9 @@ export default function AdminApp() {
           <Route path="evenements" element={<EventsList />} />
           <Route path="evenements/nouveau" element={<EventEditor />} />
           <Route path="evenements/:id" element={<EventEditor />} />
+          <Route path="actualites" element={<PostsList />} />
+          <Route path="actualites/nouveau" element={<PostEditor />} />
+          <Route path="actualites/:id" element={<PostEditor />} />
           <Route path="contenu" element={<SiteEditor />} />
           <Route path="soumissions" element={<Submissions />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

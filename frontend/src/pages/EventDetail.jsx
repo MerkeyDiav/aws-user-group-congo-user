@@ -4,6 +4,7 @@ import Icon from '../components/Icon.jsx';
 import Avatar from '../components/Avatar.jsx';
 import EventCard from '../components/EventCard.jsx';
 import NotFound from './NotFound.jsx';
+import PostCard from '../components/PostCard.jsx';
 import { useResource } from '../hooks/useResource.js';
 import { FORMAT_LABELS, countdownLabel, eventStatus, formatDate, formatTime, googleCalendarUrl } from '../utils/events.js';
 import { useNow } from '../hooks/useNow.js';
@@ -13,6 +14,7 @@ const isSet = (url) => Boolean(url) && url !== '#';
 export default function EventDetail() {
   const { id } = useParams();
   const events = useResource('events');
+  const posts = useResource('posts');
   const site = useResource('site');
   const event = events.find((e) => e.id === id);
   const [copied, setCopied] = useState(false);
@@ -24,6 +26,7 @@ export default function EventDetail() {
   const upcoming = status !== 'past';
   const description = Array.isArray(event.description) ? event.description : [event.description].filter(Boolean);
   const related = events.filter((e) => e.id !== event.id).slice(0, 3);
+  const eventPosts = posts.filter((p) => p.eventId === event.id);
 
   async function share() {
     const url = window.location.href;
@@ -221,6 +224,19 @@ export default function EventDetail() {
           </aside>
         </div>
       </section>
+
+      {eventPosts.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <h2 className="section-title">Autour de cet événement</h2>
+            <div className="grid grid--3">
+              {eventPosts.map((p) => (
+                <PostCard key={p.id} post={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="section section--soft">

@@ -9,6 +9,8 @@ import Contact from './pages/Contact.jsx';
 import Join from './pages/Join.jsx';
 import Speakers from './pages/Speakers.jsx';
 import NotFound from './pages/NotFound.jsx';
+import News from './pages/News.jsx';
+import PostDetail from './pages/PostDetail.jsx';
 import { ContentProvider } from './hooks/useResource.js';
 
 // L'espace admin est chargé à part : les visiteurs du site ne téléchargent jamais son code.
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="a-propos" element={<About />} />
         <Route path="evenements" element={<Events />} />
         <Route path="evenements/:id" element={<EventDetail />} />
+        <Route path="actualites" element={<News />} />
+        <Route path="actualites/:id" element={<PostDetail />} />
         <Route path="contact" element={<Contact />} />
         <Route path="rejoindre" element={<Join />} />
         <Route path="speakers" element={<Speakers />} />

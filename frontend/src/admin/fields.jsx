@@ -213,3 +213,60 @@ export function SaveBar({ dirty, saving, onSave, message, error }) {
     </div>
   );
 }
+
+/** Vidéo : envoi direct dans S3 avec barre de progression (MP4 recommandé, 200 Mo max). */
+export function VideoField({ label, hint, value, onChange }) {
+  const id = useId();
+  const input = useRef(null);
+  const [progress, setProgress] = useState(null);
+  const [error, setError] = useState('');
+
+  async function onFile(e) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setError('');
+    setProgress(0);
+    try {
+      onChange(await adminApi.uploadVideo(file, setProgress));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setProgress(null);
+    }
+  }
+
+  const busy = progress !== null;
+  return (
+    <div className="field adm-video">
+      <label htmlFor={id}>{label}</label>
+      {value && !busy && <video className="adm-video__preview" src={value} controls preload="metadata" />}
+      {busy && (
+        <div className="adm-progress" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+          <span style={{ width: `${progress}%` }} />
+          <small>Envoi de la vidéo : {progress} % — gardez cette page ouverte.</small>
+        </div>
+      )}
+      <div className="adm-image__buttons">
+        <button type="button" className="btn btn--ghost btn--xs" onClick={() => input.current.click()} disabled={busy}>
+          <Icon name="upload" size={15} /> {value ? 'Remplacer la vidéo' : 'Envoyer une vidéo'}
+        </button>
+        {value && !busy && (
+          <button type="button" className="btn btn--ghost btn--xs" onClick={() => onChange('')}>
+            Retirer
+          </button>
+        )}
+      </div>
+      <input
+        id={id}
+        ref={input}
+        type="file"
+        accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
+        hidden
+        onChange={onFile}
+      />
+      {hint && <small className="adm-hint">{hint}</small>}
+      {error && <small className="adm-error">{error}</small>}
+    </div>
+  );
+}

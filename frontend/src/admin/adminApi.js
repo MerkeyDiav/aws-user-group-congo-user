@@ -42,4 +42,36 @@ export const adminApi = {
   setSubmissionStatus: (id, status) => request('PATCH', `/admin/submissions/${encodeURIComponent(id)}`, { status }),
   deleteSubmission: (id) => request('DELETE', `/admin/submissions/${encodeURIComponent(id)}`),
   upload: (contentType, data) => request('POST', '/admin/uploads', { contentType, data }),
+  posts: () => request('GET', '/admin/posts'),
+  savePost: (post) => request('PUT', `/admin/posts/${encodeURIComponent(post.id)}`, post),
+  deletePost: (id) => request('DELETE', `/admin/posts/${encodeURIComponent(id)}`),
+  uploadVideo,
 };
+
+const VIDEO_TYPES = { mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime' };
+export const MAX_VIDEO_MB = 200;
+
+/**
+ * Envoi d'une vidéo : l'API donne une adresse signée, puis le navigateur envoie le fichier
+ * directement dans S3 (avec suivi de la progression). Renvoie l'adresse publique de la vidéo.
+ */
+async function uploadVideo(file, onProgress = () => {}) {
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  const contentType = Object.values(VIDEO_TYPES).includes(file.type) ? file.type : VIDEO_TYPES[ext];
+  if (!contentType) throw new ApiError('Format vidéo non accepté : MP4 (recommandé), WebM ou MOV.');
+  if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+    throw new ApiError(`Vidéo trop lourde (${MAX_VIDEO_MB} Mo maximum) : raccourcissez-la ou compressez-la.`);
+  }
+  const { uploadUrl, url } = await request('POST', '/admin/uploads/video', { contentType, size: file.size });
+
+  await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', uploadUrl);
+    xhr.setRequestHeader('Content-Type', contentType);
+    xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
+    xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new ApiError(`Envoi refusé (${xhr.status}).`)));
+    xhr.onerror = () => reject(new ApiError("Connexion interrompue pendant l'envoi : réessayez."));
+    xhr.send(file);
+  });
+  return url;
+}

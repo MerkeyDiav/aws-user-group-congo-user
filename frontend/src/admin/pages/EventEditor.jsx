@@ -4,31 +4,8 @@ import { adminApi } from '../adminApi.js';
 import { LoadState, useLoad } from '../useLoad.jsx';
 import { ImageField, LinesField, ListEditor, SaveBar, SelectField, TextField } from '../fields.jsx';
 import { FORMAT_LABELS } from '../../utils/events.js';
-
-// Kinshasa est à UTC+1 toute l'année (pas d'heure d'été) : les heures saisies sont celles de Kinshasa.
-const KINSHASA_OFFSET_MS = 60 * 60 * 1000;
-
-/** "2026-11-14T11:00:00+01:00" -> "2026-11-14T11:00" (heure de Kinshasa, pour <input type="datetime-local">) */
-function toLocalInput(iso) {
-  if (!iso) return '';
-  const t = Date.parse(iso);
-  return Number.isNaN(t) ? '' : new Date(t + KINSHASA_OFFSET_MS).toISOString().slice(0, 16);
-}
-
-/** "2026-11-14T11:00" (heure de Kinshasa) -> "2026-11-14T11:00:00+01:00" */
-const fromLocalInput = (value) => (value ? `${value}:00+01:00` : '');
-
-export function slugify(text) {
-  return text
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/['’]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80)
-    .replace(/-+$/, '');
-}
+import { fromLocalInput, slugify, toLocalInput } from '../dates.js';
+import EventCampaign from '../EventCampaign.jsx';
 
 const EMPTY_EVENT = {
   id: '',
@@ -277,6 +254,8 @@ export default function EventEditor() {
           )}
         />
       </section>
+
+      {!isNew && <EventCampaign event={event} />}
 
       <SaveBar dirty={dirty || isNew} saving={saving} onSave={save} message={message} error={error} />
     </>

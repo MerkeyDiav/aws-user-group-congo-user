@@ -15,7 +15,7 @@ resource "aws_apigatewayv2_api" "this" {
 }
 
 locals {
-  public_content_routes = ["GET /site", "GET /events"]
+  public_content_routes = ["GET /site", "GET /events", "GET /posts"]
   admin_routes = [
     "GET /admin/events",
     "PUT /admin/events/{id}",
@@ -25,6 +25,10 @@ locals {
     "PATCH /admin/submissions/{id}",
     "DELETE /admin/submissions/{id}",
     "POST /admin/uploads",
+    "POST /admin/uploads/video",
+    "GET /admin/posts",
+    "PUT /admin/posts/{id}",
+    "DELETE /admin/posts/{id}",
   ]
 }
 

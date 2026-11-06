@@ -23,6 +23,7 @@ export default function Footer() {
             <ul>
               <li><Link to="/a-propos">À propos</Link></li>
               <li><Link to="/evenements">Événements</Link></li>
+              <li><Link to="/actualites">Actualités</Link></li>
               <li><Link to="/rejoindre">Rejoindre</Link></li>
               <li><Link to="/speakers">Devenir speaker</Link></li>
             </ul>

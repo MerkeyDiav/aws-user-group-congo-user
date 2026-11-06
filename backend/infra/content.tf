@@ -40,7 +40,25 @@ resource "aws_dynamodb_table" "events" {
   deletion_protection_enabled = true
 }
 
-# --- Lambda publique : GET /site, GET /events (lecture seule) ---------------
+# Publications de la section « Actualités » (posts écrits et vidéos, programmés par date).
+resource "aws_dynamodb_table" "posts" {
+  name         = "${var.prefix}-posts"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  deletion_protection_enabled = true
+}
+
+# --- Lambda publique : GET /site, GET /events, GET /posts (lecture seule) ---
 
 data "archive_file" "content" {
   type        = "zip"
@@ -72,7 +90,7 @@ resource "aws_iam_role_policy" "content" {
       {
         Effect   = "Allow"
         Action   = ["dynamodb:GetItem", "dynamodb:Scan"]
-        Resource = [aws_dynamodb_table.site.arn, aws_dynamodb_table.events.arn]
+        Resource = [aws_dynamodb_table.site.arn, aws_dynamodb_table.events.arn, aws_dynamodb_table.posts.arn]
       },
       {
         Effect   = "Allow"
@@ -103,6 +121,7 @@ resource "aws_lambda_function" "content" {
     variables = {
       SITE_TABLE   = aws_dynamodb_table.site.name
       EVENTS_TABLE = aws_dynamodb_table.events.name
+      POSTS_TABLE  = aws_dynamodb_table.posts.name
     }
   }
 
@@ -131,7 +150,7 @@ resource "aws_iam_role_policy" "admin" {
       {
         Effect   = "Allow"
         Action   = ["dynamodb:Scan", "dynamodb:PutItem", "dynamodb:DeleteItem"]
-        Resource = [aws_dynamodb_table.site.arn, aws_dynamodb_table.events.arn]
+        Resource = [aws_dynamodb_table.site.arn, aws_dynamodb_table.events.arn, aws_dynamodb_table.posts.arn]
       },
       {
         Effect   = "Allow"
@@ -173,6 +192,7 @@ resource "aws_lambda_function" "admin" {
       SITE_TABLE        = aws_dynamodb_table.site.name
       EVENTS_TABLE      = aws_dynamodb_table.events.name
       SUBMISSIONS_TABLE = aws_dynamodb_table.submissions.name
+      POSTS_TABLE       = aws_dynamodb_table.posts.name
       MEDIA_BUCKET      = aws_s3_bucket.media.bucket
       MEDIA_BASE_URL    = "https://${aws_cloudfront_distribution.media.domain_name}"
     }

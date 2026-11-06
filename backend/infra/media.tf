@@ -105,3 +105,16 @@ resource "aws_s3_bucket_policy" "media" {
   })
   depends_on = [aws_s3_bucket_public_access_block.media]
 }
+
+# Les vidéos sont envoyées directement par le navigateur (URL signée par la Lambda admin) :
+# S3 doit accepter ces envois depuis le site.
+resource "aws_s3_bucket_cors_configuration" "media" {
+  bucket = aws_s3_bucket.media.id
+
+  cors_rule {
+    allowed_methods = ["PUT"]
+    allowed_origins = var.allowed_origins
+    allowed_headers = ["content-type"]
+    max_age_seconds = 3600
+  }
+}

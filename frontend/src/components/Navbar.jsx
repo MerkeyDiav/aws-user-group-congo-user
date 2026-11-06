@@ -7,6 +7,7 @@ export const NAV_LINKS = [
   { to: '/', label: 'Accueil', end: true },
   { to: '/a-propos', label: 'À propos' },
   { to: '/evenements', label: 'Événements' },
+  { to: '/actualites', label: 'Actualités' },
   { to: '/speakers', label: 'Devenir speaker' },
   { to: '/contact', label: 'Contact' },
 ];

@@ -27,6 +27,7 @@ npm run build     # génère dist/ (déployé automatiquement par Vercel à chaq
 | `/evenements/:id`      | Détail d'un événement (programme, speakers…)      |
 | `/rejoindre`           | Avantages + formulaire d'adhésion                 |
 | `/speakers`            | Call for Speakers + formulaire de candidature     |
+| `/actualites`          | Actualités : posts et vidéos (+ `/actualites/:id`) |
 | `/contact`             | Coordonnées + formulaire de contact               |
 | `/admin`               | Espace admin (connexion obligatoire)              |
 
@@ -36,6 +37,10 @@ Tout le contenu se gère depuis l'**espace admin** (`/admin` sur le site), sans 
 
 - **Événements** : créer, modifier, supprimer ; brouillon ou publié ; speakers, programme, replay, slides.
 - **Contenu du site** : bannière, galerie, leaders, activités, chiffres clés, images d'en-tête, contact et réseaux.
+- **Actualités** : posts écrits et vidéos, chacun publié automatiquement sur le site à sa date. Depuis la page
+  d'un événement, « Programme de publication » génère le programme type (J-7, J-6, J-5 vidéo speaker, J-3, J-1,
+  Jour J en option) en brouillons à compléter. Chaque publication se termine par le bouton d'inscription Meetup.
+  LinkedIn, WhatsApp et les autres réseaux sont gérés à la main.
 - **Soumissions** : messages de contact, adhésions et candidatures speakers.
 - **Photos** : envoyées depuis l'admin, réduites dans le navigateur, stockées sur S3 et servies par CloudFront.
 

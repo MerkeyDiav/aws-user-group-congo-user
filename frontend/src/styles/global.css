@@ -2591,3 +2591,212 @@ fieldset.field {
 .join-photo__link:hover img {
   transform: scale(1.01);
 }
+
+/* ==========================================================================
+   Actualités : cartes, page d'une publication, appel à l'inscription
+   ========================================================================== */
+.news-filters {
+  margin-bottom: 28px;
+}
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  transition: border-color 0.15s;
+}
+.post-card:hover {
+  border-color: var(--purple);
+}
+.post-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--ink);
+}
+.post-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.post-card:hover .post-card__media img {
+  transform: scale(1.03);
+}
+.post-card__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--purple-light);
+}
+.post-card__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(27, 34, 48, 0.75);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+}
+.post-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px 24px;
+}
+.post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+.post-card__body h3 {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.35;
+}
+.post-card__body h3 a:hover {
+  color: var(--purple);
+}
+.post-card__body > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.post-card__event {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: auto !important;
+  padding-top: 8px;
+  color: var(--purple) !important;
+  font-size: 0.86rem !important;
+  font-weight: 600;
+}
+.post-card__event svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.post-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #efe9fd;
+  color: var(--purple);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.post-badge--video {
+  background: #fff1dc;
+  color: #a35c00;
+}
+
+/* Page d'une publication */
+.page-header--post h1 {
+  max-width: 22ch;
+}
+.post-page__inner {
+  max-width: 860px;
+}
+.post-page__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0 0 16px;
+  color: var(--on-dark-muted);
+  font-size: 0.92rem;
+}
+.post-page__event {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--purple-light);
+}
+.post-page__event:hover {
+  color: #fff;
+}
+.post-media {
+  margin-bottom: 32px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--ink);
+}
+.post-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.post-media video {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  background: #000;
+}
+.post-media--youtube {
+  aspect-ratio: 16 / 9;
+}
+.post-media--youtube iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.post-page__body p {
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+.post-page__share {
+  margin: 8px 0 40px;
+}
+
+/* Encadré d'inscription en bas de chaque publication */
+.post-cta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px 40px;
+  padding: 36px 40px;
+  background: var(--ink);
+  color: var(--on-dark);
+}
+.post-cta .kicker {
+  color: var(--orange);
+}
+.post-cta h2 {
+  margin: 6px 0 8px;
+  color: #fff;
+  font-size: 1.35rem;
+}
+.post-cta p {
+  margin: 0;
+  color: var(--on-dark-muted);
+}
+.post-cta__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.post-cta__wa {
+  justify-content: center;
+  color: var(--on-dark-muted) !important;
+}
+.post-cta__wa:hover {
+  color: #fff !important;
+}
+@media (max-width: 760px) {
+  .post-cta {
+    grid-template-columns: 1fr;
+    padding: 28px 22px;
+  }
+}

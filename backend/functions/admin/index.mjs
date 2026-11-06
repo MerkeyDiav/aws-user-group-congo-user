@@ -10,10 +10,14 @@
  *   PATCH  /admin/submissions/{id}    -> changer le statut (new | done)
  *   DELETE /admin/submissions/{id}    -> supprimer une soumission
  *   POST   /admin/uploads             -> envoyer une image (JSON { contentType, data en base64 })
+ *   POST   /admin/uploads/video       -> lien signé pour envoyer une vidéo directement dans S3
+ *   GET    /admin/posts               -> toutes les publications (brouillons et programmées comprises)
+ *   PUT    /admin/posts/{id}          -> créer ou modifier une publication
+ *   DELETE /admin/posts/{id}          -> supprimer une publication
  *
- * Variables d'environnement : SITE_TABLE, EVENTS_TABLE, SUBMISSIONS_TABLE, MEDIA_BUCKET, MEDIA_BASE_URL
+ * Variables d'environnement : SITE_TABLE, EVENTS_TABLE, SUBMISSIONS_TABLE, POSTS_TABLE, MEDIA_BUCKET, MEDIA_BASE_URL
  */
-import { randomUUID } from 'node:crypto';
+import { createHash, createHmac, randomUUID } from 'node:crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DeleteCommand,
@@ -24,7 +28,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
-const { SITE_TABLE, EVENTS_TABLE, SUBMISSIONS_TABLE, MEDIA_BUCKET, MEDIA_BASE_URL } = process.env;
+const { SITE_TABLE, EVENTS_TABLE, SUBMISSIONS_TABLE, POSTS_TABLE, MEDIA_BUCKET, MEDIA_BASE_URL } = process.env;
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
   marshallOptions: { removeUndefinedValues: true },
@@ -152,6 +156,35 @@ export function clean(schema, value, path = '') {
   }
 }
 
+// Publications (section « Actualités ») : post écrit + photo, ou vidéo. Visibles sur le site
+// seulement si « published » est vrai ET que la date de publication est passée.
+export const POST_SCHEMA = {
+  title: T.str(200),
+  type: T.oneOf(['post', 'video']),
+  eventId: T.str(100),
+  publishAt: T.date,
+  published: T.bool,
+  image: T.url,
+  video: T.url,
+  youtubeUrl: T.url,
+  body: T.list(T.text(4000), 30),
+};
+
+const YOUTUBE_RE = /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//;
+
+export function cleanPost(id, body) {
+  if (!ID_RE.test(id || '')) throw new HttpError(400, 'Identifiant invalide : lettres minuscules, chiffres et tirets.');
+  const post = clean(POST_SCHEMA, body);
+  if (!post.title) throw new HttpError(400, 'Le titre est obligatoire.');
+  if (!post.publishAt) throw new HttpError(400, 'La date de publication est obligatoire.');
+  if (post.eventId && !ID_RE.test(post.eventId)) throw new HttpError(400, 'Événement lié invalide.');
+  if (post.youtubeUrl && !YOUTUBE_RE.test(post.youtubeUrl)) throw new HttpError(400, 'Le lien vidéo doit être un lien YouTube.');
+  if (post.published && post.type === 'video' && !post.video && !post.youtubeUrl) {
+    throw new HttpError(400, 'Publication vidéo : envoyez une vidéo ou indiquez un lien YouTube (ou gardez-la en brouillon).');
+  }
+  return { id, ...post };
+}
+
 const ID_RE = /^[a-z0-9][a-z0-9-]{0,99}$/;
 
 export function cleanEvent(id, body) {
@@ -186,6 +219,51 @@ export function decodeImage(body) {
   if (bytes.length > MAX_IMAGE_BYTES) throw new HttpError(413, 'Image trop lourde (4 Mo maximum).');
   if (bytes.length < 12 || !type.test(bytes)) throw new HttpError(400, 'Le fichier ne correspond pas à une image valide.');
   return { bytes, ext: type.ext, contentType: body.contentType };
+}
+
+// ---------------------------------------------------------------------------
+// Vidéos : trop lourdes pour passer par la Lambda (6 Mo max), le navigateur les envoie
+// directement dans S3 avec une URL signée (SigV4) qui n'accepte que le type et la taille annoncés.
+// ---------------------------------------------------------------------------
+
+const VIDEO_TYPES = { 'video/mp4': 'mp4', 'video/webm': 'webm', 'video/quicktime': 'mov' };
+const MAX_VIDEO_BYTES = 200 * 1024 * 1024;
+
+const sha256hex = (s) => createHash('sha256').update(s).digest('hex');
+const hmac = (key, s) => createHmac('sha256', key).update(s).digest();
+const uriEncode = (s) => encodeURIComponent(s).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+
+export function presignPut({ bucket, key, region, contentType, contentLength, creds, expires = 900, now = new Date() }) {
+  const host = `${bucket}.s3.${region}.amazonaws.com`;
+  const amzDate = now.toISOString().replace(/[-:]|\.\d{3}/g, '');
+  const date = amzDate.slice(0, 8);
+  const scope = `${date}/${region}/s3/aws4_request`;
+  const path = `/${key.split('/').map(uriEncode).join('/')}`;
+  const signedHeaders = 'content-length;content-type;host';
+  const params = {
+    'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
+    'X-Amz-Credential': `${creds.accessKeyId}/${scope}`,
+    'X-Amz-Date': amzDate,
+    'X-Amz-Expires': String(expires),
+    'X-Amz-SignedHeaders': signedHeaders,
+    ...(creds.sessionToken && { 'X-Amz-Security-Token': creds.sessionToken }),
+  };
+  const query = Object.keys(params)
+    .sort()
+    .map((k) => `${uriEncode(k)}=${uriEncode(params[k])}`)
+    .join('&');
+  const canonical = [
+    'PUT',
+    path,
+    query,
+    `content-length:${contentLength}\ncontent-type:${contentType}\nhost:${host}\n`,
+    signedHeaders,
+    'UNSIGNED-PAYLOAD',
+  ].join('\n');
+  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256hex(canonical)].join('\n');
+  const signingKey = hmac(hmac(hmac(hmac(`AWS4${creds.secretAccessKey}`, date), region), 's3'), 'aws4_request');
+  const signature = createHmac('sha256', signingKey).update(toSign).digest('hex');
+  return `https://${host}${path}?${query}&X-Amz-Signature=${signature}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -263,6 +341,45 @@ const ROUTES = {
   'DELETE /admin/submissions/{id}': async ({ id }) => {
     await ddb.send(new DeleteCommand({ TableName: SUBMISSIONS_TABLE, Key: { id } }));
     return reply(204);
+  },
+
+  'GET /admin/posts': async () => {
+    const posts = await scanAll(POSTS_TABLE);
+    return reply(200, posts.sort((a, b) => String(b.publishAt).localeCompare(String(a.publishAt))));
+  },
+
+  'PUT /admin/posts/{id}': async ({ id, body, who }) => {
+    const item = { ...cleanPost(id, body), updatedAt: new Date().toISOString(), updatedBy: who };
+    await ddb.send(new PutCommand({ TableName: POSTS_TABLE, Item: item }));
+    return reply(200, item);
+  },
+
+  'DELETE /admin/posts/{id}': async ({ id }) => {
+    await ddb.send(new DeleteCommand({ TableName: POSTS_TABLE, Key: { id } }));
+    return reply(204);
+  },
+
+  'POST /admin/uploads/video': async ({ body }) => {
+    const ext = VIDEO_TYPES[body.contentType];
+    if (!ext) throw new HttpError(400, 'Format vidéo non accepté : MP4 (recommandé), WebM ou MOV.');
+    const size = Number(body.size);
+    if (!Number.isInteger(size) || size <= 0) throw new HttpError(400, 'Taille de fichier invalide.');
+    if (size > MAX_VIDEO_BYTES) throw new HttpError(413, 'Vidéo trop lourde (200 Mo maximum) : raccourcissez-la ou compressez-la.');
+    const now = new Date();
+    const key = `uploads/videos/${now.getUTCFullYear()}/${String(now.getUTCMonth() + 1).padStart(2, '0')}/${randomUUID()}.${ext}`;
+    const uploadUrl = presignPut({
+      bucket: MEDIA_BUCKET,
+      key,
+      region: process.env.AWS_REGION,
+      contentType: body.contentType,
+      contentLength: size,
+      creds: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        sessionToken: process.env.AWS_SESSION_TOKEN,
+      },
+    });
+    return reply(201, { uploadUrl, url: `${MEDIA_BASE_URL}/${key}` });
   },
 
   'POST /admin/uploads': async ({ body, who }) => {

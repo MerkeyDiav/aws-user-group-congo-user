@@ -7,6 +7,7 @@ import SectionHead from '../components/SectionHead.jsx';
 import EventCard from '../components/EventCard.jsx';
 import FeaturedEvent from '../components/FeaturedEvent.jsx';
 import Gallery from '../components/Gallery.jsx';
+import PostCard from '../components/PostCard.jsx';
 import { useResource } from '../hooks/useResource.js';
 import { useNow } from '../hooks/useNow.js';
 import { eventStatus, splitEvents } from '../utils/events.js';
@@ -14,6 +15,7 @@ import { eventStatus, splitEvents } from '../utils/events.js';
 export default function Home() {
   const site = useResource('site');
   const events = useResource('events');
+  const posts = useResource('posts');
   const now = useNow();
   const { upcoming, past } = splitEvents(events, now);
   // À la une : le prochain événement ; s'il n'y en a pas, le dernier passé (affiché « Terminé », en gris).
@@ -72,6 +74,28 @@ export default function Home() {
           <div className="container">
             <SectionHead title={nextHeading} />
             <FeaturedEvent event={next} />
+          </div>
+        </section>
+      )}
+
+      {posts.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <SectionHead
+              title="Actualités"
+              action={
+                <Link to="/actualites" className="link-arrow">
+                  Toutes les actualités <Icon name="arrowRight" size={16} />
+                </Link>
+              }
+            >
+              Nos speakers, nos sujets et les coulisses de nos prochains événements.
+            </SectionHead>
+            <div className="grid grid--3">
+              {posts.slice(0, 3).map((p) => (
+                <PostCard key={p.id} post={p} event={p.eventId ? events.find((e) => e.id === p.eventId) : null} />
+              ))}
+            </div>
           </div>
         </section>
       )}

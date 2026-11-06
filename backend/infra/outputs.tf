@@ -28,3 +28,7 @@ output "media_url" {
   description = "Adresse publique des photos envoyées depuis l'admin"
   value       = "https://${aws_cloudfront_distribution.media.domain_name}"
 }
+
+output "posts_table" {
+  value = aws_dynamodb_table.posts.name
+}

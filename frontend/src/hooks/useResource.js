@@ -3,19 +3,19 @@ import { fetchResource } from '../services/api.js';
 import Logo from '../components/Logo.jsx';
 
 /**
- * Contenu du site (réglages généraux + événements), chargé une fois depuis l'API.
+ * Contenu du site (réglages généraux, événements, actualités), chargé une fois depuis l'API.
  *
  * Pour un affichage instantané aux visites suivantes (et une connexion lente), la dernière
  * version reçue est gardée dans le navigateur : elle s'affiche tout de suite, puis est
  * remplacée par la version fraîche dès que l'API répond.
  */
-const CACHE_KEY = 'awsug-content-v1';
+const CACHE_KEY = 'awsug-content-v2';
 const ContentContext = createContext(null);
 
 function readCache() {
   try {
     const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
-    return cached?.site && Array.isArray(cached.events) ? cached : null;
+    return cached?.site && Array.isArray(cached.events) && Array.isArray(cached.posts) ? cached : null;
   } catch {
     return null;
   }
@@ -44,9 +44,14 @@ export function ContentProvider({ children }) {
 
   const load = useCallback(() => {
     setFailed(false);
-    Promise.all([fetchResource('site'), fetchResource('events')])
-      .then(([site, events]) => {
-        const fresh = { site, events };
+    Promise.all([
+      fetchResource('site'),
+      fetchResource('events'),
+      // Les actualités ne doivent jamais empêcher le site de s'afficher.
+      fetchResource('posts').catch(() => []),
+    ])
+      .then(([site, events, posts]) => {
+        const fresh = { site, events, posts };
         setContent(fresh);
         writeCache(fresh);
       })
@@ -77,7 +82,7 @@ export function ContentProvider({ children }) {
   return createElement(ContentContext.Provider, { value: content }, children);
 }
 
-/** Renvoie le contenu demandé : « site » (objet) ou « events » (liste). */
+/** Renvoie le contenu demandé : « site » (objet), « events » ou « posts » (listes). */
 export function useResource(name) {
   const content = useContext(ContentContext);
   if (!content) throw new Error('useResource doit être utilisé dans <ContentProvider>.');
