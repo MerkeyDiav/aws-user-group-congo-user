@@ -1,0 +1,20 @@
+# Dépendances et builds
+node_modules/
+dist/
+backend/.build/
+
+# Secrets et variables locales
+.env
+.env.*
+!.env.example
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Divers
+.DS_Store
+Thumbs.db

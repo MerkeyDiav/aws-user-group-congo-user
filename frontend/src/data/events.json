@@ -1,0 +1,350 @@
+[
+  {
+    "id": "securing-container-workloads-on-aws",
+    "title": "Securing Container Workloads on AWS: Vulnerability Assessment, Continuous Monitoring and Remediation",
+    "summary": "Comment sécuriser vos workloads conteneurisés sur AWS : de l'analyse de vulnérabilités à la remédiation, en passant par la surveillance continue.",
+    "start": "2026-11-14T11:00:00+01:00",
+    "end": "2026-11-14T13:00:00+01:00",
+    "format": "online",
+    "location": "Google Meet",
+    "language": "Français",
+    "image": "",
+    "tags": ["Sécurité", "Containers", "Amazon ECR", "Amazon Inspector"],
+    "description": [
+      "Les conteneurs sont devenus le standard pour déployer des applications modernes, mais ils apportent aussi leur lot de risques : images vulnérables, dépendances obsolètes, mauvaises configurations et menaces à l'exécution.",
+      "Dans ce webinaire, nous verrons comment mettre en place une stratégie de sécurité complète pour vos workloads conteneurisés sur AWS : scanner vos images, surveiller en continu vos environnements et automatiser la remédiation."
+    ],
+    "highlights": [
+      "Évaluer les vulnérabilités de vos images avec Amazon ECR et Amazon Inspector",
+      "Mettre en place une surveillance continue de vos clusters ECS et EKS",
+      "Détecter les menaces à l'exécution avec Amazon GuardDuty",
+      "Automatiser la remédiation et intégrer la sécurité dans votre pipeline CI/CD"
+    ],
+    "agenda": [],
+    "speakers": [
+      {
+        "name": "Esperance Ngalu",
+        "title": "AWS Expert | 10x AWS Certified | AWS Builder",
+        "photo": "",
+        "bio": "",
+        "linkedin": ""
+      }
+    ],
+    "registrationUrl": "#",
+    "recordingUrl": "",
+    "slidesUrl": ""
+  },
+  {
+    "id": "aws-alumni-day-septembre-2026",
+    "title": "AWS Alumni Day",
+    "summary": "Une session de 3 heures pour relever des défis pratiques sur AWS et échanger avec des experts.",
+    "start": "2026-09-01T10:00:00+01:00",
+    "end": "2026-09-01T13:00:00+01:00",
+    "format": "in-person",
+    "location": "Kinshasa",
+    "language": "Français",
+    "tags": ["Hands-on", "Networking"],
+    "description": [
+      "Prêt à faire progresser vos compétences AWS à travers des défis pratiques ? L'AWS User Group Congo-Kinshasa vous a réunis pour une session immersive de 3 heures afin d'échanger avec des experts AWS."
+    ],
+    "speakers": [],
+    "attendees": 1
+  },
+  {
+    "id": "aws-alumni-day-juin-2026",
+    "title": "AWS Alumni Day",
+    "summary": "Une session de 3 heures pour relever des défis pratiques sur AWS et échanger avec des experts.",
+    "start": "2026-06-27T10:00:00+01:00",
+    "end": "2026-06-27T13:00:00+01:00",
+    "format": "in-person",
+    "location": "Kinshasa",
+    "language": "Français",
+    "tags": ["Hands-on", "Networking"],
+    "description": [
+      "Prêt à faire progresser vos compétences AWS à travers des défis pratiques ? L'AWS User Group Congo-Kinshasa vous a réunis pour une session immersive de 3 heures afin d'échanger avec des experts AWS."
+    ],
+    "speakers": [],
+    "attendees": 1
+  },
+  {
+    "id": "aws-virtual-jam-security-audit-devops",
+    "title": "AWS Virtual Jam : Security, Audit & DevOps",
+    "summary": "3 heures de défis pratiques en équipe sur des scénarios réels de sécurité, d'audit et de DevOps.",
+    "start": "2026-02-28T10:00:00+01:00",
+    "end": "2026-02-28T13:00:00+01:00",
+    "format": "online",
+    "location": "En ligne (Zoom)",
+    "language": "Anglais",
+    "tags": ["Jam", "Sécurité", "Audit", "DevOps"],
+    "description": [
+      "Une Virtual Jam Session immersive de 3 heures où les participants ont résolu en équipe des scénarios cloud réels autour de la sécurité, de l'audit et du DevOps, dans des environnements qui reproduisent de vrais cas d'entreprise."
+    ],
+    "highlights": [
+      "Défis pratiques de sécurité",
+      "Scénarios d'audit réels",
+      "Bonnes pratiques DevOps en action",
+      "Apprentissage collaboratif en équipe"
+    ],
+    "speakers": [{ "name": "Ashwin", "title": "Modérateur", "photo": "", "bio": "", "linkedin": "" }],
+    "attendees": 12
+  },
+  {
+    "id": "aws-community-day-kinshasa-2025",
+    "title": "AWS Community Day Kinshasa",
+    "summary": "Une journée par la communauté, pour la communauté : sessions techniques, démos, workshops et networking.",
+    "start": "2025-11-22T09:30:00+01:00",
+    "format": "in-person",
+    "location": "Orange Digital Center, Av. des Huileries, en face du stade des Martyrs, Kinshasa",
+    "language": "Français",
+    "tags": ["Community Day", "Serverless", "IA/ML", "DevOps", "Sécurité"],
+    "description": [
+      "L'AWS Community Day Kinshasa a réuni utilisateurs AWS, développeurs, startups, professionnels et passionnés du cloud pour une journée d'apprentissage, de partage et de rencontres.",
+      "Organisée par les AWS User Groups locaux et portée par des bénévoles, la journée proposait des sessions techniques et des démos animées par des experts AWS et des Community Builders, des retours d'expérience clients, des workshops et des espaces de networking."
+    ],
+    "highlights": [
+      "Serverless et architectures orientées événements",
+      "IA / Machine Learning sur AWS",
+      "DevOps et automatisation cloud",
+      "Data lakes et analytics",
+      "Sécurité, gouvernance et bonnes pratiques",
+      "Cas d'usage réels et présentations de startups"
+    ],
+    "speakers": [],
+    "attendees": 8
+  },
+  {
+    "id": "client-au-coeur-innovation-technologique",
+    "title": "Le client au cœur du développement de toute innovation technologique",
+    "summary": "Placer l'écoute et l'implication du client au centre du développement de produits et services technologiques.",
+    "start": "2025-03-29T09:30:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Innovation", "Produit", "Expérience client"],
+    "description": [
+      "Dans un monde où l'innovation technologique évolue à une vitesse fulgurante, placer le client au cœur du processus de développement devient une priorité essentielle. Chaque nouvelle solution, produit ou service doit répondre aux besoins réels et aux attentes spécifiques des utilisateurs.",
+      "En mettant l'accent sur l'écoute et l'implication active du client, les entreprises peuvent créer des technologies réellement adaptées, intuitives et bénéfiques, renforcer la fidélité à la marque et assurer un impact positif durable sur le marché."
+    ],
+    "speakers": [],
+    "attendees": 1
+  },
+  {
+    "id": "cloud-refactoring-scalability-resilience",
+    "title": "Cloud Refactoring: Rebuilding for Scalability & Resilience",
+    "summary": "Principes, méthodes et bonnes pratiques pour reconstruire et moderniser vos systèmes dans le cloud.",
+    "start": "2025-03-22T11:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Architecture", "Microservices", "Serverless", "Modernisation"],
+    "description": [
+      "Dans un contexte où la scalabilité et la résilience sont devenues des piliers de la performance numérique, le Cloud Refactoring s'impose comme une démarche incontournable pour optimiser les architectures applicatives.",
+      "Cette session a présenté les principes, méthodes et bonnes pratiques du refactoring cloud : comment reconstruire, moderniser et adapter vos systèmes pour tirer pleinement parti des environnements cloud natifs."
+    ],
+    "highlights": [
+      "Qu'est-ce que le Cloud Refactoring et pourquoi y recourir ?",
+      "Identifier les limites des architectures legacy face aux exigences modernes",
+      "Repenser l'architecture : découplage, microservices, serverless, conteneurs",
+      "Outils et services clés pour refactorer efficacement dans le cloud",
+      "Cas concrets de transformation réussie",
+      "Mesurer les bénéfices : performance, coût, disponibilité, agilité"
+    ],
+    "speakers": [],
+    "attendees": 1
+  },
+  {
+    "id": "reussir-programme-cybersecurite",
+    "title": "Comment réussir un programme de cybersécurité : mobiliser les dirigeants et renforcer la culture cyber",
+    "summary": "Le rôle central des dirigeants dans la réussite des stratégies de sécurité.",
+    "start": "2025-03-15T09:30:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Cybersécurité", "Gouvernance", "Leadership"],
+    "description": [
+      "Dans un monde de plus en plus exposé aux cybermenaces, la cybersécurité ne peut plus être reléguée au seul département IT. Les dirigeants jouent un rôle central dans la réussite des stratégies de sécurité."
+    ],
+    "highlights": [
+      "Les leviers pour obtenir l'adhésion du top management dans les projets cybersécurité",
+      "L'importance de bâtir une culture cyber solide au sein des équipes",
+      "Passer d'une approche défensive à une cybersécurité proactive et stratégique",
+      "Cas concrets et recommandations pour renforcer la résilience organisationnelle"
+    ],
+    "speakers": [],
+    "attendees": 4
+  },
+  {
+    "id": "grc-contrainte-opportunite-innovation",
+    "title": "Gouvernance, Risques et Conformité : de la contrainte à l'opportunité d'innovation",
+    "summary": "Transformer les exigences de GRC en leviers stratégiques pour l'innovation.",
+    "start": "2025-03-08T09:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["GRC", "Conformité", "Gouvernance", "Sécurité"],
+    "description": [
+      "Dans un environnement numérique en constante évolution, la Gouvernance, les Risques et la Conformité (GRC) sont souvent perçus comme des freins à l'innovation. Pourtant, lorsqu'elles sont bien maîtrisées, ces contraintes deviennent de véritables leviers stratégiques pour renforcer la résilience des organisations et favoriser l'innovation."
+    ],
+    "highlights": [
+      "Comprendre les fondamentaux de la GRC et leur impact sur les entreprises",
+      "Transformer les contraintes réglementaires en avantages concurrentiels",
+      "Stratégies et bonnes pratiques pour une gestion efficace des risques",
+      "Cas pratiques et retours d'expérience"
+    ],
+    "speakers": [{ "name": "Joselito Vasukama", "title": "Speaker", "photo": "", "bio": "", "linkedin": "" }],
+    "attendees": 3
+  },
+  {
+    "id": "role-strategique-pentester",
+    "title": "Le rôle stratégique du Pentester dans la sécurisation des systèmes d'entreprise",
+    "summary": "Missions, outils et méthodologies du test d'intrusion au service de la cybersécurité.",
+    "start": "2025-02-08T09:30:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Pentest", "Cybersécurité", "OWASP"],
+    "description": [
+      "Face à des cyberattaques en constante évolution, le rôle du Pentester devient essentiel pour anticiper et contrer les menaces qui pèsent sur les systèmes d'information. Ce meetup a exploré son importance stratégique, son impact sur la résilience des infrastructures IT et les meilleures pratiques pour identifier et corriger les vulnérabilités avant qu'elles ne soient exploitées."
+    ],
+    "highlights": [
+      "Les missions et responsabilités du Pentester",
+      "Outils et méthodologies d'audit de sécurité (OWASP, Kali Linux, Burp Suite, Metasploit…)",
+      "Étude de cas : analyse de failles critiques et scénarios d'attaque",
+      "Intégrer les tests d'intrusion dans la stratégie globale de cybersécurité",
+      "Carrière et compétences clés pour devenir expert en pentesting"
+    ],
+    "speakers": [],
+    "attendees": 4
+  },
+  {
+    "id": "aws-reinvent-recap-2025",
+    "title": "AWS re:Invent Recap",
+    "summary": "Les annonces et nouveautés AWS présentées à re:Invent, décryptées pour la communauté.",
+    "start": "2025-01-25T10:00:00+01:00",
+    "format": "hybrid",
+    "location": "Kinshasa & en ligne",
+    "language": "Français",
+    "tags": ["re:Invent", "Nouveautés AWS", "Sécurité cloud"],
+    "description": [
+      "Une session pour découvrir les dernières innovations d'AWS annoncées à re:Invent : cloud computing, SaaS, stockage, big data et sécurité cloud.",
+      "Que vous soyez utilisateur AWS confirmé ou nouveau venu, cette rencontre a permis d'acquérir des connaissances pratiques et d'échanger avec d'autres professionnels du cloud."
+    ],
+    "speakers": [],
+    "attendees": 143
+  },
+  {
+    "id": "security-by-design",
+    "title": "Security by Design : construire un monde numérique plus sûr dès aujourd'hui",
+    "summary": "Construire des solutions cloud sécurisées avec Amazon Web Services, dès la conception.",
+    "start": "2024-12-07T10:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Sécurité", "Protection des données", "DevSecOps"],
+    "description": [
+      "Une session consacrée à la construction de solutions cloud sécurisées avec AWS : cybersécurité, protection des données et bonnes pratiques pour garantir la sécurité et l'intégrité de vos applications.",
+      "Des stratégies DevOps aux techniques de chiffrement, les intervenants ont partagé des conseils pratiques pour renforcer la sécurité de vos déploiements cloud."
+    ],
+    "speakers": [],
+    "attendees": 13
+  },
+  {
+    "id": "reseaux-dans-le-cloud",
+    "title": "Tout savoir sur les réseaux dans le cloud",
+    "summary": "VPC, VPN, segmentation : comprendre, configurer et sécuriser vos réseaux cloud.",
+    "start": "2024-11-30T19:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Networking", "Amazon VPC", "Sécurité"],
+    "description": [
+      "Avec l'essor du cloud computing, la gestion des réseaux dans le cloud est devenue un enjeu stratégique. Ce meetup a présenté les concepts fondamentaux des réseaux cloud, les meilleures pratiques pour configurer et sécuriser vos environnements, et les outils essentiels pour garantir une performance réseau optimale."
+    ],
+    "highlights": [
+      "Les bases des réseaux dans le cloud : VPN, VPC et segmentation réseau",
+      "Améliorer la performance et la résilience des réseaux cloud",
+      "Sécuriser les communications et les données en transit",
+      "Retours d'expérience et démonstrations en direct"
+    ],
+    "speakers": [],
+    "attendees": 16
+  },
+  {
+    "id": "plan-de-secours-aws",
+    "title": "AWS : votre plan de secours infaillible en cas de crise",
+    "summary": "Reprise après sinistre et continuité d'activité avec Amazon S3, AWS Backup, Route 53 et plus.",
+    "start": "2024-11-16T10:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Disaster Recovery", "AWS Backup", "Résilience"],
+    "description": [
+      "Pannes, cyberattaques, catastrophes naturelles : face aux crises imprévues, la résilience de votre infrastructure est cruciale. Cet événement a exploré les meilleures pratiques de reprise après sinistre et de continuité d'activité avec les services AWS comme Amazon S3, AWS Backup et Route 53.",
+      "Au programme : automatiser la sauvegarde des données critiques, répliquer ses environnements et restaurer rapidement ses systèmes en cas de sinistre."
+    ],
+    "speakers": [],
+    "attendees": 11
+  },
+  {
+    "id": "modele-fondamental-expert-domaine",
+    "title": "L'art de transformer un modèle fondamental en expert du domaine",
+    "summary": "L'IA générative sur AWS : cas d'usage, démonstrations et stratégies d'intégration.",
+    "start": "2024-10-26T10:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["IA générative", "Modèles de fondation", "Machine Learning"],
+    "description": [
+      "Une exploration des possibilités offertes par l'intelligence artificielle générative sur AWS : création de contenu automatisée, modélisation prédictive et intégration de l'IA générative dans vos applications.",
+      "Cas d'usage pratiques, démonstrations de projets et stratégies pour spécialiser un modèle de fondation sur un domaine métier."
+    ],
+    "speakers": [],
+    "attendees": 29
+  },
+  {
+    "id": "securite-reseau-performances",
+    "title": "Optimisation de la sécurité réseau et des performances à l'ère des cybermenaces",
+    "summary": "Protéger les infrastructures réseau tout en maintenant des performances élevées.",
+    "start": "2024-10-19T10:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Sécurité réseau", "Performance", "Cybersécurité"],
+    "description": [
+      "Face à des cybermenaces de plus en plus sophistiquées, cet événement a présenté les meilleures pratiques et solutions pour protéger les infrastructures réseau tout en maintenant des niveaux de performance élevés : détecter, prévenir et répondre aux menaces, avec des études de cas réels et des démonstrations."
+    ],
+    "speakers": [],
+    "attendees": 2
+  },
+  {
+    "id": "deploiement-automatise-gitlab-ci-cd",
+    "title": "Déploiement automatisé sur AWS avec GitLab CI/CD pour des applications robustes",
+    "summary": "Automatiser le déploiement d'applications sur AWS avec GitLab CI/CD.",
+    "start": "2024-10-12T10:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["DevOps", "CI/CD", "GitLab"],
+    "description": [
+      "Une session interactive pour automatiser le déploiement d'applications robustes sur AWS avec GitLab CI/CD : bonnes pratiques d'intégration et de déploiement continus, efficacité et fiabilité des workflows de développement."
+    ],
+    "speakers": [],
+    "attendees": 4
+  },
+  {
+    "id": "aws-kinshasa-community-launch",
+    "title": "AWS Kinshasa Community Launch : Migration, Best Practice and Security",
+    "summary": "Le tout premier meetup de l'AWS User Group Congo-Kinshasa.",
+    "start": "2024-08-10T09:00:00+01:00",
+    "format": "online",
+    "location": "En ligne",
+    "language": "Français",
+    "tags": ["Lancement", "Migration", "Certification", "Sécurité"],
+    "description": [
+      "Le premier meetup de l'AWS User Group Congo-Kinshasa, pour poser les bases de la communauté en RDC.",
+      "Au programme : le parcours de certification AWS, pourquoi migrer vers le cloud, déployer des solutions sur AWS et sécuriser son infrastructure cloud."
+    ],
+    "speakers": [],
+    "attendees": 43
+  }
+]

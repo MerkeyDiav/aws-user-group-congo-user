@@ -1,0 +1,83 @@
+{
+  "name": "AWS User Group Congo-Kinshasa",
+  "shortName": "AWS UG Kinshasa",
+  "logo": "/images/logo/logo-128.png",
+  "tagline": "La communauté AWS de Kinshasa",
+  "description": "Une communauté de passionnés du cloud qui apprennent, construisent et partagent ensemble autour des technologies Amazon Web Services en République Démocratique du Congo.",
+  "hero": {
+    "title": "La communauté des passionnés du {Cloud} à Kinshasa",
+    "subtitle": "L'AWS User Group Congo-Kinshasa réunit développeurs, architectes, étudiants et professionnels autour d'Amazon Web Services : meetups, webinaires, workshops et préparation aux certifications.",
+    "images": ["/images/hero/banner.jpg"],
+    "credit": "Photo : Valdhy Mbemba / Unsplash"
+  },
+  "pageImages": {
+    "about": "/images/pages/kinshasa-echangeur.jpg",
+    "events": "/images/pages/tour-echangeur.jpg",
+    "join": "/images/pages/rejoindre.jpg",
+    "speakers": "/images/pages/speakers.jpg",
+    "contact": "/images/pages/contact.jpg"
+  },
+  "activities": [
+    {
+      "label": "Meetups",
+      "text": "Des rencontres à Kinshasa pour échanger, réseauter et partager des retours d'expérience.",
+      "image": "/images/activities/meetups.jpg"
+    },
+    {
+      "label": "Webinaires",
+      "text": "Des sessions en ligne animées par des experts AWS, accessibles partout en RDC.",
+      "image": "/images/activities/webinaires.jpg"
+    },
+    {
+      "label": "Workshops",
+      "text": "Des ateliers et des Jams pour construire de vraies solutions sur AWS.",
+      "image": "/images/activities/workshops.jpg"
+    },
+    {
+      "label": "Certifications",
+      "text": "Des ressources et des sessions pour préparer vos certifications AWS.",
+      "image": "/images/activities/certifications.jpg"
+    }
+  ],
+  "stats": [
+    { "value": "841", "label": "Membres sur Meetup" },
+    { "value": "18", "label": "Événements organisés" },
+    { "value": "143", "label": "Participants au re:Invent Recap" },
+    { "value": "Août 2024", "label": "Lancement du groupe" }
+  ],
+  "contact": {
+    "email": "contact@awsugkinshasa.cd",
+    "phone": "",
+    "location": "Kinshasa, République Démocratique du Congo"
+  },
+  "social": {
+    "linkedin": "https://www.linkedin.com/company/aws-user-group-congo-kinshasa",
+    "meetup": "https://www.meetup.com/aws-user-group-congo-kinshasa",
+    "whatsapp": "https://chat.whatsapp.com/KgJ4hmO09vxL2ZP8Gc9ZwK"
+  },
+  "gallery": [
+    { "src": "/images/gallery/01.jpg", "alt": "Photo de groupe des participants devant le lieu de l'événement", "size": "big" },
+    { "src": "/images/gallery/02.jpg", "alt": "Une speakeuse prend la parole au micro", "size": "tall" },
+    { "src": "/images/gallery/03.jpg", "alt": "Des participants écoutent une présentation" },
+    { "src": "/images/gallery/04.jpg", "alt": "Deux participantes échangent pendant la pause" },
+    { "src": "/images/gallery/05.jpg", "alt": "Networking autour d'une table", "size": "wide" },
+    { "src": "/images/gallery/06.jpg", "alt": "Deux participants travaillent ensemble sur un atelier pratique" },
+    { "src": "/images/gallery/07.jpg", "alt": "Un participant code sur son ordinateur portable pendant un workshop" }
+  ],
+  "leaders": [
+    {
+      "name": "Nehemie Nzuzi",
+      "role": "AWS Community Builder (Containers) · Platform Engineer",
+      "photo": "",
+      "bio": "Co-fondateur et co-leader de l'AWS User Group Congo-Kinshasa. AWS Community Builder dans la catégorie Containers et Platform Engineer, il œuvre à faire grandir l'écosystème AWS en RDC.",
+      "linkedin": "#"
+    },
+    {
+      "name": "Hariton",
+      "role": "Co-leader · AWS User Group Leader",
+      "photo": "",
+      "bio": "Co-leader de l'AWS User Group Congo-Kinshasa. Engagé pour rendre les compétences cloud accessibles aux talents congolais et connecter la communauté locale à l'écosystème AWS mondial.",
+      "linkedin": "#"
+    }
+  ]
+}
