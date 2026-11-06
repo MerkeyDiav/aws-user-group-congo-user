@@ -196,7 +196,12 @@ export default function EventEditor() {
           value={event.tags.join(', ')}
           onChange={(v) => set({ tags: v.split(',').map((t) => t.trim()).filter(Boolean) })}
         />
-        <ImageField label="Image de couverture" hint="Format paysage conseillé (16:9)." value={event.image} onChange={(image) => set({ image })} />
+        <ImageField
+          label="Affiche de l'événement"
+          hint="Affichée en grand sur la page d'accueil tant que c'est le prochain événement, et en haut de sa page. Tous formats : portrait, carré ou paysage."
+          value={event.image}
+          onChange={(image) => set({ image })}
+        />
       </section>
 
       <section className="adm-panel adm-form">

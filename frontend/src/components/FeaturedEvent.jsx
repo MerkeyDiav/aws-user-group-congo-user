@@ -8,8 +8,15 @@ export default function FeaturedEvent({ event }) {
   const hasRegistration = event.registrationUrl && event.registrationUrl !== '#';
   const speakers = event.speakers || [];
 
+  const poster = event.image;
+
   return (
-    <article className="next-event">
+    <article className={`next-event ${poster ? 'next-event--poster' : ''}`}>
+      {poster && (
+        <Link to={url} className="next-event__poster">
+          <img src={poster} alt={`Affiche : ${event.title}`} />
+        </Link>
+      )}
       <div className="next-event__date">
         <span className="next-event__countdown">{daysUntilLabel(event.start)}</span>
         <span className="next-event__day">{day}</span>

@@ -40,8 +40,18 @@ export async function prepareImage(file) {
   canvas.height = Math.round(img.naturalHeight * scale);
   canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
 
-  const type = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, type, 0.85));
+  const encode = (type) => new Promise((resolve) => canvas.toBlob(resolve, type, 0.88));
+  let type = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+  let blob = await encode(type);
+  if (blob && type === 'image/png' && blob.size > 1.5 * 1024 * 1024) {
+    // PNG lourd (affiche, capture) : en JPEG, il pèse bien moins pour un rendu identique à l'écran.
+    type = 'image/jpeg';
+    const ctx = canvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-over'; // fond blanc sous les zones transparentes
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    blob = await encode(type);
+  }
   if (!blob) throw new Error('Conversion de l’image impossible.');
   if (blob.size > MAX_BYTES) throw new Error('Image trop lourde même après réduction (4 Mo maximum).');
   return { contentType: type, data: await toBase64(blob) };
