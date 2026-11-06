@@ -8,7 +8,7 @@ export default function LeaderCard({ leader }) {
       <div>
         <h3>{leader.name}</h3>
         <p className="leader__role">{leader.role}</p>
-        <p>{leader.bio}</p>
+        {leader.bio && <p>{leader.bio}</p>}
         {leader.linkedin && (
           <div className="socials">
             <a

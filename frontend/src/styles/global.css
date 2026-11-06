@@ -2428,3 +2428,25 @@ fieldset.field {
   height: 1px;
   overflow: hidden;
 }
+
+/* ---------- Chargement initial du contenu ---------- */
+.boot {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 28px;
+  min-height: 100vh;
+  padding: 24px 16px;
+  background: var(--paper);
+  text-align: center;
+}
+.boot__error p {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+.spinner--dark {
+  width: 28px;
+  height: 28px;
+  border-color: var(--line);
+  border-top-color: var(--purple);
+}

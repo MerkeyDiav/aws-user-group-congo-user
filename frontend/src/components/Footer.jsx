@@ -41,10 +41,12 @@ export default function Footer() {
           <div>
             <h4>Contact</h4>
             <ul className="footer__contact">
-              <li>
-                <Icon name="mail" size={17} />
-                <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
-              </li>
+              {site.contact?.email && (
+                <li>
+                  <Icon name="mail" size={17} />
+                  <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+                </li>
+              )}
               <li>
                 <Icon name="pin" size={17} />
                 <span>{site.contact.location}</span>

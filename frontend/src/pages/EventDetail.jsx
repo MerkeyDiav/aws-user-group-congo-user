@@ -7,7 +7,7 @@ import NotFound from './NotFound.jsx';
 import { useResource } from '../hooks/useResource.js';
 import { FORMAT_LABELS, daysUntilLabel, formatDate, formatTime, googleCalendarUrl, isUpcoming } from '../utils/events.js';
 
-const isSet = (url) => url && url !== '';
+const isSet = (url) => Boolean(url) && url !== '#';
 
 export default function EventDetail() {
   const { id } = useParams();

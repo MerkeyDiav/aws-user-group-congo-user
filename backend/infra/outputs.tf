@@ -6,3 +6,25 @@ output "api_url" {
 output "submissions_table" {
   value = aws_dynamodb_table.submissions.name
 }
+
+output "site_table" {
+  value = aws_dynamodb_table.site.name
+}
+
+output "events_table" {
+  value = aws_dynamodb_table.events.name
+}
+
+output "cognito_client_id" {
+  description = "VITE_COGNITO_CLIENT_ID"
+  value       = aws_cognito_user_pool_client.admin_web.id
+}
+
+output "cognito_user_pool_id" {
+  value = aws_cognito_user_pool.admins.id
+}
+
+output "media_url" {
+  description = "Adresse publique des photos envoyées depuis l'admin"
+  value       = "https://${aws_cloudfront_distribution.media.domain_name}"
+}

@@ -33,3 +33,9 @@ variable "log_retention_days" {
   type        = number
   default     = 14
 }
+
+variable "admin_emails" {
+  description = "Comptes de l'espace admin (Cognito). Ajouter une adresse puis redéployer pour créer un compte."
+  type        = list(string)
+  default     = ["nehemiediav@gmail.com"]
+}

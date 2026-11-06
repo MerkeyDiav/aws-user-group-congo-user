@@ -19,15 +19,17 @@ export default function Contact() {
       <section className="section">
         <div className="container split">
           <div className="contact-info">
-            <article className="info-card">
-              <span className="icon-box">
-                <Icon name="mail" size={22} />
-              </span>
-              <div>
-                <h3>Email</h3>
-                <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
-              </div>
-            </article>
+            {site.contact?.email && (
+              <article className="info-card">
+                <span className="icon-box">
+                  <Icon name="mail" size={22} />
+                </span>
+                <div>
+                  <h3>Email</h3>
+                  <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+                </div>
+              </article>
+            )}
             <article className="info-card">
               <span className="icon-box">
                 <Icon name="pin" size={22} />
@@ -37,7 +39,7 @@ export default function Contact() {
                 <p>{site.contact.location}</p>
               </div>
             </article>
-            {site.contact.phone && (
+            {site.contact?.phone && (
               <article className="info-card">
                 <span className="icon-box">
                   <Icon name="whatsapp" size={22} />

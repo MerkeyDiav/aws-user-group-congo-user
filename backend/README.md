@@ -6,7 +6,7 @@ Le frontend est hébergé sur Vercel et appelle cette API.
 ## Phase 1 : formulaires du site
 
 ```
-Site (Vercel) ── POST /submissions/{contact|join|speaker} ──► API Gateway (HTTP API, limite 5 req/s)
+Site (Vercel) ── POST /submissions/{contact|join|speaker} ──► API Gateway (HTTP API, limite 5 req/s sur cette route)
                                                                   │
                                                                   ▼
                                                      Lambda awsug-kin-submissions (Node.js 22, arm64)
@@ -53,11 +53,40 @@ Après le premier `apply` :
 Quelques centimes par mois au volume d'un user group : Lambda, API Gateway et DynamoDB à la demande restent dans
 le niveau gratuit, et SNS envoie 1 000 e-mails/mois gratuitement. Une alerte budget prévient à 80 % de 10 $/mois.
 
-## Voir les soumissions (en attendant le back office)
+## Phase 2 : contenu du site et espace admin
+
+```
+Site (Vercel) ── GET /site, GET /events ──────────► Lambda awsug-kin-content (lecture seule)
+                                                        └─► DynamoDB awsug-kin-site, awsug-kin-events
+
+/admin ── connexion ──► Cognito (offre Lite, comptes créés par Terraform uniquement)
+       └─ jeton ──► /admin/* (autorisation JWT API Gateway) ──► Lambda awsug-kin-admin
+                                                        ├─► DynamoDB site, events, submissions
+                                                        └─► S3 awsug-kin-media-* ──► CloudFront (photos)
+```
+
+| Fichier | Contenu |
+| --- | --- |
+| `functions/content/index.mjs` | Lecture publique : réglages du site et événements publiés (brouillons exclus) |
+| `functions/admin/index.mjs` | Routes admin, validation stricte par schéma, envoi de photos (contenu vérifié) |
+| `infra/content.tf` | Tables site et events, Lambdas content et admin, droits IAM |
+| `infra/auth.tf` | Cognito : pool d'utilisateurs, client navigateur, comptes admins |
+| `infra/media.tf` | Bucket S3 privé, CloudFront avec Origin Access Control |
+| `seed/`, `scripts/seed.mjs` | Contenu de départ, à importer une seule fois |
+
+### Après le premier déploiement
 
 ```bash
-aws dynamodb query --region us-east-2 --table-name awsug-kin-submissions \
-  --index-name byTypeAndDate --key-condition-expression "#t = :t" \
-  --expression-attribute-names '{"#t":"type"}' --expression-attribute-values '{":t":{"S":"speaker"}}' \
-  --no-scan-index-forward
+node backend/scripts/seed.mjs   # refuse d'écraser une table déjà remplie (--force pour forcer)
 ```
+
+Chaque compte admin reçoit un e-mail de `no-reply@verificationemail.com` avec un mot de passe temporaire
+(valable 7 jours) à changer à la première connexion sur `/admin`.
+
+### Ajouter ou retirer un admin
+
+Modifier `admin_emails` dans `infra/variables.tf` (ou `terraform.tfvars`), puis `terraform plan` et `terraform apply`.
+
+### Mettre à jour le frontend après un changement d'infrastructure
+
+Les valeurs de `terraform output` (`api_url`, `cognito_client_id`) sont reprises dans `frontend/.env.production`.

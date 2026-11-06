@@ -46,16 +46,18 @@ export default function Home() {
             </div>
           </div>
 
-          <dl className="stats">
-            {site.stats.map((s) => (
-              <div key={s.label} className="stat">
-                <dt>{s.label}</dt>
-                <dd>
-                  <CountUp value={s.value} />
-                </dd>
-              </div>
-            ))}
-          </dl>
+          {site.stats?.length > 0 && (
+            <dl className="stats">
+              {site.stats.map((s) => (
+                <div key={s.label} className="stat">
+                  <dt>{s.label}</dt>
+                  <dd>
+                    <CountUp value={s.value} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
       </section>
 
