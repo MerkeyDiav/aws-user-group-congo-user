@@ -94,6 +94,8 @@ export const SITE_SCHEMA = {
   description: T.text(1500),
   hero: { title: T.str(200), subtitle: T.text(800), images: T.list(T.url, 10), credit: T.str(200) },
   pageImages: { about: T.url, events: T.url, join: T.url, speakers: T.url, contact: T.url },
+  // Photo montrée en entier en haut de la page Rejoindre (visuel avec texte : jamais recadrée).
+  joinPhoto: { image: T.url, alt: T.str(300) },
   activities: T.list({ label: T.str(60), text: T.text(400), image: T.url }, 8),
   stats: T.list({ value: T.str(40), label: T.str(100) }, 8),
   contact: { email: T.str(200), phone: T.str(60), location: T.str(200) },

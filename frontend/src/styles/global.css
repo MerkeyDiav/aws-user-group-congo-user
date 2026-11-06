@@ -2572,3 +2572,22 @@ fieldset.field {
     animation: none;
   }
 }
+
+/* ---------- Page Rejoindre : photo d'invitation (montrée en entier) ---------- */
+.join-photo__link {
+  display: block;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(27, 34, 48, 0.14);
+}
+.join-photo__link img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+.join-photo__link:hover img {
+  transform: scale(1.01);
+}

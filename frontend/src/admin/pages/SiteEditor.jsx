@@ -11,6 +11,7 @@ const SECTIONS = [
   ['activites', 'Activités'],
   ['chiffres', 'Chiffres clés'],
   ['images', 'Images des pages'],
+  ['rejoindre', 'Page Rejoindre'],
   ['contact', 'Contact et réseaux'],
 ];
 
@@ -225,6 +226,22 @@ export default function SiteEditor() {
             <ImageField key={key} label={label} compact value={site.pageImages[key]} onChange={(v) => setIn('pageImages', { [key]: v })} />
           ))}
         </div>
+      </section>
+
+      <section id="rejoindre" className="adm-panel adm-form">
+        <h2>Page « Rejoindre »</h2>
+        <ImageField
+          label="Photo d'invitation"
+          hint="Affichée en entier (jamais recadrée) en haut de la page Rejoindre ; un clic mène au formulaire d'inscription. Vide = pas de photo."
+          value={site.joinPhoto?.image}
+          onChange={(image) => setIn('joinPhoto', { image })}
+        />
+        <TextField
+          label="Texte de la photo (accessibilité)"
+          hint="Recopiez le texte écrit sur la photo : il est lu aux personnes malvoyantes et aide le référencement."
+          value={site.joinPhoto?.alt}
+          onChange={(alt) => setIn('joinPhoto', { alt })}
+        />
       </section>
 
       <section id="contact" className="adm-panel adm-form">

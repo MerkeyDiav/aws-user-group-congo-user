@@ -37,6 +37,19 @@ export default function Join() {
         cloud.
       </PageHeader>
 
+      {site.joinPhoto?.image && (
+        <section className="section section--pt-sm join-photo">
+          <div className="container">
+            <a href="#inscription" className="join-photo__link">
+              <img
+                src={site.joinPhoto.image}
+                alt={site.joinPhoto.alt || 'Rejoignez la communauté AWS User Group Congo-Kinshasa'}
+              />
+            </a>
+          </div>
+        </section>
+      )}
+
       <section className="section">
         <div className="container">
           <SectionHead eyebrow="Pourquoi nous rejoindre" title="Ce que vous gagnez en tant que membre" />
