@@ -30,7 +30,11 @@ function marshal(v) {
   return { M: Object.fromEntries(Object.entries(v).map(([k, x]) => [k, marshal(x)])) };
 }
 
-const aws = (args) => execFileSync('aws', [...args, '--region', REGION, '--output', 'json'], { encoding: 'utf8' });
+// Sous Windows, l'AWS CLI lit les fichiers « file:// » en Windows-1252 par défaut : les accents seraient
+// enregistrés abîmés (« Ã© » au lieu de « é »). On force l'UTF-8 en lecture comme en sortie.
+const CLI_ENV = { ...process.env, AWS_CLI_FILE_ENCODING: 'UTF-8', PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8' };
+const aws = (args) =>
+  execFileSync('aws', [...args, '--region', REGION, '--output', 'json'], { encoding: 'utf8', env: CLI_ENV });
 
 function count(table) {
   return JSON.parse(aws(['dynamodb', 'scan', '--table-name', table, '--select', 'COUNT', '--max-items', '1'])).Count;
@@ -42,7 +46,7 @@ function writeAll(table, items) {
     for (let i = 0; i < items.length; i += 25) {
       const file = join(dir, `batch-${i}.json`);
       const request = { [table]: items.slice(i, i + 25).map((it) => ({ PutRequest: { Item: marshal(it).M } })) };
-      writeFileSync(file, JSON.stringify(request));
+      writeFileSync(file, JSON.stringify(request), 'utf8');
       const res = JSON.parse(aws(['dynamodb', 'batch-write-item', '--request-items', `file://${file}`]));
       if (Object.keys(res.UnprocessedItems || {}).length) throw new Error(`Éléments non écrits dans ${table}`);
     }
