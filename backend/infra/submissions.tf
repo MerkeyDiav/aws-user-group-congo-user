@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Formulaires du site : table DynamoDB + Lambda + e-mail SES
+# Formulaires du site : table DynamoDB + Lambda + notification e-mail via SNS
 # ---------------------------------------------------------------------------
 
 resource "aws_dynamodb_table" "submissions" {
@@ -35,9 +35,17 @@ resource "aws_dynamodb_table" "submissions" {
   deletion_protection_enabled = true
 }
 
-# Adresse d'envoi/réception. AWS envoie un lien de confirmation à cette adresse au premier déploiement.
-resource "aws_sesv2_email_identity" "notify" {
-  email_identity = var.notify_email
+# Notifications par e-mail via SNS : pas besoin de nom de domaine, et les e-mails partent
+# de no-reply@sns.amazonaws.com (authentifié par AWS, donc pas classé en spam par Gmail).
+# Au premier déploiement, AWS envoie un e-mail « Subscription Confirmation » : cliquer sur le lien.
+resource "aws_sns_topic" "notify" {
+  name = "${var.prefix}-submissions-notify"
+}
+
+resource "aws_sns_topic_subscription" "notify_email" {
+  topic_arn = aws_sns_topic.notify.arn
+  protocol  = "email"
+  endpoint  = var.notify_email
 }
 
 data "archive_file" "submissions" {
@@ -58,7 +66,7 @@ resource "aws_iam_role" "submissions" {
   })
 }
 
-# Droits minimaux : écrire dans la table, envoyer depuis l'identité SES, écrire ses logs.
+# Droits minimaux : écrire dans la table, publier sur le topic de notification, écrire ses logs.
 resource "aws_iam_role_policy" "submissions" {
   name = "submissions"
   role = aws_iam_role.submissions.id
@@ -72,8 +80,8 @@ resource "aws_iam_role_policy" "submissions" {
       },
       {
         Effect   = "Allow"
-        Action   = ["ses:SendEmail"]
-        Resource = aws_sesv2_email_identity.notify.arn
+        Action   = ["sns:Publish"]
+        Resource = aws_sns_topic.notify.arn
       },
       {
         Effect   = "Allow"
@@ -103,8 +111,7 @@ resource "aws_lambda_function" "submissions" {
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.submissions.name
-      NOTIFY_TO  = var.notify_email
-      MAIL_FROM  = "AWS User Group Kinshasa <${var.notify_email}>"
+      TOPIC_ARN  = aws_sns_topic.notify.arn
     }
   }
 

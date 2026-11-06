@@ -1,21 +1,25 @@
 /**
  * Lambda « submissions » — reçoit les formulaires du site (contact, adhésion, speaker),
- * les enregistre dans DynamoDB et envoie une notification par e-mail via SES.
+ * les enregistre dans DynamoDB et envoie une notification par e-mail via un topic SNS.
+ *
+ * Pourquoi SNS et pas SES : sans nom de domaine, un e-mail SES « de » une adresse Gmail
+ * échoue aux contrôles d'authentification de Gmail et finit en spam. Les e-mails SNS partent
+ * de no-reply@sns.amazonaws.com, authentifié par AWS. Avec un domaine, on pourra revenir à SES.
  *
  * Route : POST /submissions/{type}   (type = contact | join | speaker)
- * Variables d'environnement : TABLE_NAME, NOTIFY_TO, MAIL_FROM
+ * Variables d'environnement : TABLE_NAME, TOPIC_ARN
  *
  * Le SDK AWS v3 est fourni par le runtime Node.js 22 : aucune dépendance à installer.
  */
 import { randomUUID } from 'node:crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
+import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 
-const { TABLE_NAME, NOTIFY_TO, MAIL_FROM } = process.env;
+const { TABLE_NAME, TOPIC_ARN } = process.env;
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
-const ses = new SESv2Client({});
+const sns = new SNSClient({});
 
 const FORMS = {
   contact: {
@@ -107,10 +111,20 @@ export function validate(type, data) {
   return errors;
 }
 
-const escapeHtml = (s) =>
-  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-
 const display = (value) => (Array.isArray(value) ? value.join(', ') : value === 'yes' ? 'Oui' : value);
+
+/** Sujet SNS : ASCII uniquement, sans retour à la ligne, moins de 100 caractères. */
+export function asciiSubject(s) {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[‘’]/g, "'")
+    .replace(/[–—]/g, '-')
+    .replace(/[^\x20-\x7e]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 99);
+}
 
 export function buildEmail(item) {
   const form = FORMS[item.type];
@@ -122,24 +136,11 @@ export function buildEmail(item) {
     '',
     ...rows.map(([label, value]) => `${label} : ${value}`),
     '',
+    `Pour répondre, écrivez à : ${item.data.email}`,
     `Reçu le ${item.createdAt} — référence ${item.id}`,
   ].join('\n');
 
-  const html = `<!doctype html><html><body style="font-family:Arial,sans-serif;color:#1b2230;line-height:1.5">
-<h2 style="margin:0 0 4px">${escapeHtml(form.subject)}</h2>
-<p style="margin:0 0 20px;color:#586174">${escapeHtml(who)}</p>
-<table cellpadding="8" style="border-collapse:collapse;max-width:680px;width:100%">
-${rows
-  .map(
-    ([label, value]) =>
-      `<tr style="border-top:1px solid #e1e4ea"><td style="width:180px;color:#586174;vertical-align:top">${escapeHtml(label)}</td><td style="white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
-  )
-  .join('\n')}
-</table>
-<p style="margin-top:24px;font-size:12px;color:#586174">Reçu le ${escapeHtml(item.createdAt)} — référence ${escapeHtml(item.id)}<br>Répondez directement à cet e-mail pour écrire à la personne.</p>
-</body></html>`;
-
-  return { subject: `[AWS UG Kinshasa] ${form.subject} — ${who}`, text, html };
+  return { subject: asciiSubject(`[AWS UG Kinshasa] ${form.subject} - ${who}`), text };
 }
 
 export const handler = async (event) => {
@@ -175,21 +176,9 @@ export const handler = async (event) => {
   // L'e-mail est un plus : s'il échoue, la soumission reste enregistrée dans DynamoDB.
   try {
     const mail = buildEmail(item);
-    await ses.send(
-      new SendEmailCommand({
-        FromEmailAddress: MAIL_FROM,
-        Destination: { ToAddresses: [NOTIFY_TO] },
-        ReplyToAddresses: [data.email],
-        Content: {
-          Simple: {
-            Subject: { Data: mail.subject, Charset: 'UTF-8' },
-            Body: { Text: { Data: mail.text, Charset: 'UTF-8' }, Html: { Data: mail.html, Charset: 'UTF-8' } },
-          },
-        },
-      }),
-    );
+    await sns.send(new PublishCommand({ TopicArn: TOPIC_ARN, Subject: mail.subject, Message: mail.text }));
   } catch (err) {
-    console.error(JSON.stringify({ msg: 'ses_send_failed', id: item.id, error: err.name, detail: err.message }));
+    console.error(JSON.stringify({ msg: 'notify_failed', id: item.id, error: err.name, detail: err.message }));
   }
 
   console.log(JSON.stringify({ msg: 'submission_saved', id: item.id, type }));

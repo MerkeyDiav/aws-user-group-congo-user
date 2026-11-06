@@ -11,7 +11,7 @@ variable "prefix" {
 }
 
 variable "notify_email" {
-  description = "Adresse qui reçoit les formulaires (et qui les envoie, tant qu'il n'y a pas de domaine)"
+  description = "Adresse qui reçoit les notifications des formulaires (abonnée au topic SNS)"
   type        = string
   default     = "nehemiediav@gmail.com"
 }
