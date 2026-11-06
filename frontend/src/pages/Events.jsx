@@ -6,6 +6,7 @@ import FeaturedEvent from '../components/FeaturedEvent.jsx';
 import Icon from '../components/Icon.jsx';
 import { useResource } from '../hooks/useResource.js';
 import { FORMAT_LABELS, matchesQuery, splitEvents } from '../utils/events.js';
+import { useNow } from '../hooks/useNow.js';
 
 const FORMATS = [['all', 'Tous'], ...Object.entries(FORMAT_LABELS)];
 
@@ -23,7 +24,8 @@ function groupByYear(events) {
 export default function Events() {
   const events = useResource('events');
   const site = useResource('site');
-  const { upcoming, past } = useMemo(() => splitEvents(events), [events]);
+  const now = useNow();
+  const { upcoming, past } = useMemo(() => splitEvents(events, now), [events, now]);
   const [params, setParams] = useSearchParams();
   const tab = params.get('tab') === 'past' ? 'past' : 'upcoming';
   const [query, setQuery] = useState('');

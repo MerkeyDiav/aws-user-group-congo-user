@@ -5,7 +5,8 @@ import Avatar from '../components/Avatar.jsx';
 import EventCard from '../components/EventCard.jsx';
 import NotFound from './NotFound.jsx';
 import { useResource } from '../hooks/useResource.js';
-import { FORMAT_LABELS, daysUntilLabel, formatDate, formatTime, googleCalendarUrl, isUpcoming } from '../utils/events.js';
+import { FORMAT_LABELS, countdownLabel, eventStatus, formatDate, formatTime, googleCalendarUrl } from '../utils/events.js';
+import { useNow } from '../hooks/useNow.js';
 
 const isSet = (url) => Boolean(url) && url !== '#';
 
@@ -15,10 +16,12 @@ export default function EventDetail() {
   const site = useResource('site');
   const event = events.find((e) => e.id === id);
   const [copied, setCopied] = useState(false);
+  const now = useNow();
 
   if (!event) return <NotFound title="Événement introuvable" />;
 
-  const upcoming = isUpcoming(event);
+  const status = eventStatus(event, now);
+  const upcoming = status !== 'past';
   const description = Array.isArray(event.description) ? event.description : [event.description].filter(Boolean);
   const related = events.filter((e) => e.id !== event.id).slice(0, 3);
 
@@ -52,7 +55,9 @@ export default function EventDetail() {
             <Link to={upcoming ? '/evenements' : '/evenements?tab=past'}>Événements</Link>
           </nav>
           <p className="page-header__meta">
-            <span className={upcoming ? 'status status--upcoming' : 'status'}>{upcoming ? 'À venir' : 'Terminé'}</span>
+            <span className={upcoming ? 'status status--upcoming' : 'status'}>
+              {status === 'live' ? 'En cours' : upcoming ? 'À venir' : 'Terminé'}
+            </span>
             <span>{FORMAT_LABELS[event.format]}</span>
             {event.language && <span>{event.language}</span>}
           </p>
@@ -174,7 +179,7 @@ export default function EventDetail() {
               )}
             </ul>
 
-            {upcoming && <p className="sidebar-card__countdown">{daysUntilLabel(event.start)}</p>}
+            {upcoming && <p className="sidebar-card__countdown">{countdownLabel(event, now)}</p>}
 
             <div className="sidebar-card__actions">
               {upcoming ? (

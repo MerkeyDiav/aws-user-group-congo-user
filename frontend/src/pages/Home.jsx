@@ -8,14 +8,20 @@ import EventCard from '../components/EventCard.jsx';
 import FeaturedEvent from '../components/FeaturedEvent.jsx';
 import Gallery from '../components/Gallery.jsx';
 import { useResource } from '../hooks/useResource.js';
-import { splitEvents } from '../utils/events.js';
+import { useNow } from '../hooks/useNow.js';
+import { eventStatus, splitEvents } from '../utils/events.js';
 
 export default function Home() {
   const site = useResource('site');
   const events = useResource('events');
-  const { upcoming, past } = splitEvents(events);
-  const next = upcoming[0];
-  const more = [...upcoming.slice(1), ...past].slice(0, 3);
+  const now = useNow();
+  const { upcoming, past } = splitEvents(events, now);
+  // À la une : le prochain événement ; s'il n'y en a pas, le dernier passé (affiché « Terminé », en gris).
+  const next = upcoming[0] || past[0];
+  const more = [...upcoming, ...past].filter((e) => e !== next).slice(0, 3);
+  const nextStatus = next && eventStatus(next, now);
+  const nextHeading =
+    nextStatus === 'past' ? 'Dernier événement' : nextStatus === 'live' ? 'En ce moment' : 'Prochain événement';
 
   return (
     <>
@@ -64,7 +70,7 @@ export default function Home() {
       {next && (
         <section className="section section--soft">
           <div className="container">
-            <SectionHead title="Prochain événement" />
+            <SectionHead title={nextHeading} />
             <FeaturedEvent event={next} />
           </div>
         </section>

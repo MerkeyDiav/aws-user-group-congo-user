@@ -2520,3 +2520,55 @@ fieldset.field {
 .event-card__img img {
   object-fit: contain;
 }
+
+/* ---------- États de l'événement à la une : en cours / terminé ---------- */
+.next-event__countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.next-event--live .next-event__countdown {
+  border-color: #4ade80;
+  color: #4ade80;
+}
+.next-event__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: livePulse 1.6s ease-out infinite;
+}
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+  }
+}
+/* Terminé : tout passe en gris, l'affiche en noir et blanc. */
+.next-event--past .next-event__date,
+.next-event--past .next-event__poster {
+  background: #4b5263;
+}
+.next-event--past .next-event__countdown {
+  border-color: #c3c8d2;
+  color: #c3c8d2;
+}
+.next-event--past .next-event__poster img {
+  filter: grayscale(1);
+  opacity: 0.75;
+}
+.next-event--past .next-event__poster:hover img {
+  filter: grayscale(0.4);
+  opacity: 0.9;
+}
+.next-event--past .next-event__body h3 a,
+.next-event--past .next-event__speakers strong {
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .next-event__pulse {
+    animation: none;
+  }
+}
