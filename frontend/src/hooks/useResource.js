@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchResource, getLocal, hasBackend } from '../services/api.js';
+import { fetchResource, getLocal, hasContentApi } from '../services/api.js';
 
 /**
  * Renvoie immédiatement les données locales, puis les remplace par celles de
@@ -9,7 +9,7 @@ export function useResource(name) {
   const [data, setData] = useState(() => getLocal(name));
 
   useEffect(() => {
-    if (!hasBackend) return undefined;
+    if (!hasContentApi) return undefined;
     let alive = true;
     fetchResource(name)
       .then((remote) => alive && remote && setData(remote))

@@ -1,3 +1,4 @@
+import Honeypot from '../components/Honeypot.jsx';
 import PageHeader from '../components/PageHeader.jsx';
 import Icon from '../components/Icon.jsx';
 import SocialLinks from '../components/SocialLinks.jsx';
@@ -74,6 +75,7 @@ export default function Contact() {
               </FormSuccess>
             ) : (
               <form className="form" onSubmit={onSubmit}>
+                <Honeypot />
                 <h2 className="form-title">Envoyez-nous un message</h2>
                 <div className="form-row">
                   <div className="field">

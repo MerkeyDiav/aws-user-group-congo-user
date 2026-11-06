@@ -1,3 +1,4 @@
+import Honeypot from './Honeypot.jsx';
 import { useRef, useState } from 'react';
 import Icon from './Icon.jsx';
 import { FormError, FormSuccess } from './FormStatus.jsx';
@@ -104,6 +105,7 @@ export default function SpeakerForm({ formats, topics }) {
       </div>
 
       <form ref={formRef} className="form" noValidate onSubmit={handleSubmit}>
+        <Honeypot />
         <fieldset className="wizard-step" hidden={step !== 0} ref={(el) => (stepRefs.current[0] = el)}>
           <legend className="sr-only">Votre profil</legend>
           <div className="form-row">

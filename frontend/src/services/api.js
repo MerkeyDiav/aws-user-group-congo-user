@@ -18,7 +18,15 @@ import eventsData from '../data/events.json';
 
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
+/** Formulaires envoyés à l'API dès que VITE_API_URL est défini. */
 export const hasBackend = Boolean(API_URL);
+
+/**
+ * Contenu (site, événements) lu depuis l'API seulement si VITE_CONTENT_FROM_API=true,
+ * c'est-à-dire une fois le back office en place. Sinon : fichiers JSON locaux.
+ */
+const contentFromApi = hasBackend && import.meta.env.VITE_CONTENT_FROM_API === 'true';
+export const hasContentApi = contentFromApi;
 
 const localData = {
   site: siteData,
@@ -30,7 +38,7 @@ export function getLocal(resource) {
 }
 
 export async function fetchResource(resource) {
-  if (!hasBackend) return localData[resource];
+  if (!contentFromApi) return localData[resource];
   const res = await fetch(`${API_URL}/${resource}`);
   if (!res.ok) throw new Error(`Erreur ${res.status} lors du chargement de "${resource}"`);
   return res.json();
@@ -49,6 +57,10 @@ export async function submitForm(type, payload) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString() }),
   });
-  if (!res.ok) throw new Error("L'envoi a échoué. Merci de réessayer dans quelques instants.");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    if (res.status === 429) throw new Error('Trop de demandes en peu de temps. Réessayez dans une minute.');
+    throw new Error(body.message || "L'envoi a échoué. Merci de réessayer dans quelques instants.");
+  }
   return res.json().catch(() => ({ ok: true }));
 }

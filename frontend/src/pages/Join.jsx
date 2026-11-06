@@ -1,3 +1,4 @@
+import Honeypot from '../components/Honeypot.jsx';
 import PageHeader from '../components/PageHeader.jsx';
 import SectionHead from '../components/SectionHead.jsx';
 import Icon from '../components/Icon.jsx';
@@ -101,6 +102,7 @@ export default function Join() {
               </FormSuccess>
             ) : (
               <form className="form" onSubmit={onSubmit}>
+                <Honeypot />
                 <div className="form-row">
                   <div className="field">
                     <label htmlFor="j-first">
